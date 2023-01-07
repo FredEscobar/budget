@@ -2,9 +2,16 @@ import React from "react";
 
 const IncomeData = (props) => {
   return (
-    <div className="is-flex is-align-content-start">
-      <b className="mx-2">{props.label}</b>
-      <p className="mx-2">{props.value}</p>
+    <div className="columns">
+      <div className="column is-1 has-text-left  has-text-weight-bold p-1">
+        {props.label}
+      </div>
+      <div className="column is-2 has-text-right p-1">
+        {props.value.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD",
+        })}
+      </div>
     </div>
   );
 };

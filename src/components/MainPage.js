@@ -1,13 +1,17 @@
 import React from "react";
-import IncomeSummary from "./income/incomeSummary";
-import ExpensesList from "./expenses/expensesList";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import BudgetList from "./budgets/budgetList";
+import BudgetPage from "./budgets/budgetPage";
 
 const MainPage = (props) => {
   return (
     <div className="container m-4">
-      <h1 className="is-size-5 has-text-weight-medium">Primera quincena</h1>
-      <IncomeSummary />
-      <ExpensesList />
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<BudgetList />} />
+          <Route path="/budget/:id" element={<BudgetPage />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
