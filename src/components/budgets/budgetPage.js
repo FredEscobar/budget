@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
-import IncomeSummary from "../income/incomeSummary";
-import ExpensesList from "../expenses/expensesList";
 import { getBudgetById } from "../../api/budgetApi";
 import { useParams } from "react-router-dom";
+import Period from "../period/period";
 
 const BudgetPage = (props) => {
   const [budget, setBudget] = useState({
     periods: [
       {
+        exchangeRate: 0,
+        description: "",
+        bankTransfer: {
+          total: 0,
+          detail: [],
+        },
         incomeSummary: {
           salary: 0,
           ir: 0,
@@ -15,6 +20,7 @@ const BudgetPage = (props) => {
           expenses: 0,
           balance: 0,
         },
+        expectedExpenses: [],
       },
     ],
   });
@@ -27,9 +33,9 @@ const BudgetPage = (props) => {
 
   return (
     <div className="container m-4">
-      <h1 className="is-size-5 has-text-weight-medium">Primera quincena</h1>
-      <IncomeSummary data={budget.periods[0].incomeSummary} />
-      <ExpensesList />
+      {budget.periods.map((p) => {
+        return <Period key={p.description} period={p} />;
+      })}
     </div>
   );
 };
