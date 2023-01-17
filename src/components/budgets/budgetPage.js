@@ -34,7 +34,14 @@ const BudgetPage = (props) => {
   return (
     <div className="container m-4">
       {budget.periods.map((p) => {
-        return <Period key={p.description} period={p} />;
+        return (
+          <Period
+            key={p.description}
+            period={p}
+            budget={budget}
+            setBudget={setBudget}
+          />
+        );
       })}
     </div>
   );

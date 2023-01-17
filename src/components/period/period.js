@@ -3,7 +3,7 @@ import TransfersSummary from "../transfers/transfersSummary";
 import IncomeSummary from "../income/incomeSummary";
 import ExpensesList from "../expenses/expensesList";
 
-const Period = ({ period }) => {
+const Period = ({ period, budget, setBudget }) => {
   return (
     <div className="panel">
       <div className="panel-heading">{period.description}</div>
@@ -32,7 +32,11 @@ const Period = ({ period }) => {
           </div>
           <div className="columns">
             <div className="column">
-              <ExpensesList expenses={period.expectedExpenses} />
+              <ExpensesList
+                period={period}
+                budget={budget}
+                setBudget={setBudget}
+              />
             </div>
           </div>
         </div>
