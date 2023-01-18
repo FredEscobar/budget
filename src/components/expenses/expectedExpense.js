@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import * as budgetApi from "../../api/budgetApi";
+import { v4 as uuidv4 } from "uuid";
 
 const ExpectedExpense = ({
   isActive,
@@ -8,14 +8,9 @@ const ExpectedExpense = ({
   period,
   budget,
   setBudget,
+  expectedExpense,
+  setExpectedExpense,
 }) => {
-  const [expectedExpense, setExpectedExpense] = useState({
-    id: uuidv4(),
-    description: "",
-    valueUSD: 0,
-    valueCS: 0,
-  });
-
   const [errors, setErrors] = useState({});
 
   function handleCancel() {
@@ -24,12 +19,17 @@ const ExpectedExpense = ({
 
   function handleSave() {
     if (!formIsValid()) return;
+
     const newPeriods = budget.periods.map((p) =>
       p.description !== period.description
         ? p
         : {
             ...p,
-            expectedExpenses: [...p.expectedExpenses, expectedExpense],
+            expectedExpenses: expectedExpense.id
+              ? p.expectedExpenses.map((p) =>
+                  p.id === expectedExpense.id ? expectedExpense : p
+                )
+              : [...p.expectedExpenses, { ...expectedExpense, id: uuidv4() }],
           }
     );
 
@@ -83,6 +83,7 @@ const ExpectedExpense = ({
                 type="text"
                 placeholder=""
                 onChange={onChange}
+                value={expectedExpense.description}
               />
               {errors.description && (
                 <div className="has-text-left has-text-danger">
@@ -101,6 +102,7 @@ const ExpectedExpense = ({
                 type="number"
                 placeholder=""
                 onChange={onChange}
+                value={expectedExpense.valueUSD}
               />
               {errors.valueUSD && (
                 <div className="has-text-left has-text-danger">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getBudgets } from "../../api/budgetApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 const BudgetList = () => {
   const [budgets, setBudgets] = useState([]);
@@ -29,7 +29,7 @@ const BudgetList = () => {
                     href={"/budget/" + budget.id}
                     className="button is-link is-small is-outlined"
                   >
-                    <FontAwesomeIcon icon={faEye} size="2x" />
+                    <FontAwesomeIcon icon={faPenToSquare} />
                   </a>
                 </span>
               </td>

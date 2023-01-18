@@ -43,6 +43,10 @@ input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
 
+.button.is-ghost.is-focused:not(:active), .button.is-ghost:focus:not(:active) {
+  box-shadow: none!important;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

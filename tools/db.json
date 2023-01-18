@@ -34,32 +34,8 @@
           },
           "expectedExpenses": [
             {
-              "id": "bd007d82-043e-46f3-9bc7-f6a86cadfb1a",
-              "description": "Liquidacion",
-              "valueUSD": 200,
-              "valueCS": 0
-            },
-            {
-              "id": "3644f666-8b5f-4974-9cd1-8ff521420f6a",
-              "description": "Vacaciones",
-              "valueUSD": 200,
-              "valueCS": 0
-            },
-            {
-              "id": "f1883391-5ea6-4eaf-900f-1e18db262bd7",
-              "description": "Aguinaldo",
-              "valueUSD": 200,
-              "valueCS": 0
-            },
-            {
-              "id": "c9008ef8-f6fa-4180-bc10-007e345d6e5b",
-              "description": "Seguridad/Mantenimiento residencial",
-              "valueUSD": 50,
-              "valueCS": 0
-            },
-            {
               "id": "1d0029e3-7496-4e0e-8bcd-68d8683276dd",
-              "description": "Mama",
+              "description": "Ayuda a mama",
               "valueUSD": 250,
               "valueCS": 0
             },
@@ -82,28 +58,10 @@
               "valueCS": 0
             },
             {
-              "id": "7e97390f-e55d-4671-bb22-ba3adabc6e11",
-              "description": "Ahorro abono extraordinario casa",
-              "valueUSD": 700,
-              "valueCS": 0
-            },
-            {
-              "id": "f1eb89f7-ba12-4946-a52a-1b1587532258",
-              "description": "Maestria",
-              "valueUSD": 75,
-              "valueCS": 0
-            },
-            {
-              "id": "5b81ce80-351b-42ef-a8d8-a6c43dcd816e",
-              "description": "",
-              "valueUSD": 75,
-              "valueCS": 0
-            },
-            {
-              "id": "8b501eed-2c51-47be-943d-bd959281d047",
-              "description": "Ahorro para zapatos",
-              "valueUSD": 25,
-              "valueCS": 0
+              "description": "Ingles Anita",
+              "valueUSD": 58,
+              "valueCS": 0,
+              "id": "1d75bb1e-53bc-44dc-9ed4-7d8974152540"
             }
           ]
         },
@@ -224,12 +182,6 @@
               "id": "ac5de65c-c4b9-41dc-aded-1edefe4ff2df",
               "description": "Inss Facultativo",
               "valueUSD": 43.51,
-              "valueCS": 0
-            },
-            {
-              "id": "51fa7099-4f39-4362-8a97-7bc9c5251ccf",
-              "description": "Escuela Ingles Ana",
-              "valueUSD": 27,
               "valueCS": 0
             }
           ],
