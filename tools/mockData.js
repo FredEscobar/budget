@@ -205,6 +205,36 @@ const budgets = [
         },
       },
     ],
+    incurredExpenses: {
+      totalUSD: 0,
+      totalCS: 721.12,
+      items: [
+        {
+          id: "d779ea4e-0d7f-49ed-b87b-2848614e7fcf",
+          description: "Pedidos Ya Propina - CR",
+          category: "Varios",
+          creditCard: "Amex",
+          valueCS: 35.44,
+          valueUSD: 0,
+        },
+        {
+          id: "4a822880-d785-4222-b618-026f34aedcaa",
+          description: "Max X Menos Cervezas",
+          category: "Varios",
+          creditCard: "Amex",
+          valueCS: 650.84,
+          valueUSD: 0,
+        },
+        {
+          id: "13200bef-32d7-439f-808a-d6fd7607cea3",
+          description: "Pedidos Ya CR",
+          category: "Varios",
+          creditCard: "Amex",
+          valueCS: 35.44,
+          valueUSD: 0,
+        },
+      ],
+    },
   },
 ];
 // Using CommonJS style export so we can consume via Node (without using Babel-node)

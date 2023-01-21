@@ -9,7 +9,6 @@ import { saveBudget } from "../../api/budgetApi";
 const ExpensesList = ({ period, budget, setBudget }) => {
   const [isModalActive, setIsModalActive] = useState(false);
   const [currentExpense, setCurrentExpense] = useState({});
-  const [expenseToDeleteId, setExpenseToDeleteId] = useState();
 
   function showModal() {
     setIsModalActive(true);
@@ -105,9 +104,9 @@ const ExpensesList = ({ period, budget, setBudget }) => {
                   })}
                 </td>
                 <td className="has-text-right">
-                  {expense.valueCS.toLocaleString("en-NI", {
+                  {expense.valueCS.toLocaleString("es-NI", {
                     style: "currency",
-                    currency: "USD",
+                    currency: "NIO",
                   })}
                 </td>
                 <td>
