@@ -114,10 +114,10 @@ const ExpectedExpense = ({
         </section>
         <footer className="modal-card-foot">
           <button className="button is-success" onClick={handleSave}>
-            Save changes
+            Guardar
           </button>
           <button className="button" onClick={handleCancel}>
-            Cancel
+            Cancelar
           </button>
         </footer>
       </div>

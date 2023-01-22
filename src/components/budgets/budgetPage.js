@@ -102,7 +102,7 @@ const BudgetPage = (props) => {
         })}
       </div>
       <div className={tabCssClass.incurredExpensesContent}>
-        <OcurredExpensesList budget={budget} />
+        <OcurredExpensesList budget={budget} setBudget={setBudget} />
       </div>
     </div>
   );
