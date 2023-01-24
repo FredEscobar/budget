@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import OcurredExpense from "./ocurredExpense";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import { saveBudget } from "../../api/budgetApi";
 
 const OcurredExpensesList = ({ budget, setBudget }) => {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -7,9 +11,6 @@ const OcurredExpensesList = ({ budget, setBudget }) => {
     amountCS: 0,
     amountUSD: 0,
   });
-  function showModal() {
-    setIsModalActive(true);
-  }
 
   const categories = [
     { value: "c4683940-c7d2-4136-9ced-fa9e0fcaef9e", text: "Supermercado" },
@@ -31,6 +32,40 @@ const OcurredExpensesList = ({ budget, setBudget }) => {
     { id: "6f48f233-c08e-4e22-984e-976162beac4a", name: "La Colonia" },
     { id: "44553317-68ca-4b9c-9382-c5e0bdc27f94", name: "Walmart" },
   ];
+
+  function showModal() {
+    setIsModalActive(true);
+  }
+
+  function handleDelete(id) {
+    confirmAlert({
+      title: "Eliminar",
+      message: "¿Desea eliminar este gasto incurrido?",
+      buttons: [
+        {
+          label: "Sí",
+          onClick: () => {
+            const newIncurredExpenses = budget.incurredExpenses.items.filter(
+              (ie) => ie.id !== id
+            );
+
+            const updatedBudget = {
+              ...budget,
+              incurredExpenses: {
+                ...budget.incurredExpenses,
+                items: newIncurredExpenses,
+              },
+            };
+
+            saveBudget(updatedBudget).then((b) => setBudget(b));
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  }
 
   return (
     <>
@@ -55,6 +90,7 @@ const OcurredExpensesList = ({ budget, setBudget }) => {
                 <th className="has-text-centered">Tarjeta</th>
                 <th className="has-text-right">Monto CS</th>
                 <th className="has-text-right">Monto USD</th>
+                <th></th>
               </tr>
             </thead>
             <tfoot>
@@ -74,6 +110,7 @@ const OcurredExpensesList = ({ budget, setBudget }) => {
                     currency: "USD",
                   })}
                 </th>
+                <th></th>
               </tr>
             </tfoot>
             <tbody>
@@ -117,6 +154,16 @@ const OcurredExpensesList = ({ budget, setBudget }) => {
                         style: "currency",
                         currency: "USD",
                       })}
+                    </td>
+                    <td>
+                      <span className="icon">
+                        <button
+                          onClick={() => handleDelete(incurredExpense.id)}
+                          className="button is-danger is-small is-outlined"
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
+                        </button>
+                      </span>
                     </td>
                   </tr>
                 ))}

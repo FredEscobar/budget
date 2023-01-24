@@ -239,22 +239,6 @@
             "creditCard": "e0eca7da-ac01-449b-8d6e-99ebd33037a1",
             "amountCS": 650.84,
             "amountUSD": 0
-          },
-          {
-            "id": "13200bef-32d7-439f-808a-d6fd7607cea3",
-            "description": "Pedidos Ya CR",
-            "category": "c889f9ae-268c-4667-aca5-999a68f4b22e",
-            "creditCard": "e0eca7da-ac01-449b-8d6e-99ebd33037a1",
-            "amountCS": 35.44,
-            "amountUSD": 0
-          },
-          {
-            "amountCS": 303,
-            "amountUSD": 0,
-            "description": "Leche Agria Mi Viejo Ranchito Pedidos Ya",
-            "category": "4b2c0be4-c47a-4fad-a090-1a9bf5493f3d",
-            "creditCard": "e0eca7da-ac01-449b-8d6e-99ebd33037a1",
-            "id": "0ebe6ca8-f628-4804-b3b2-2e40d70a3fd5"
           }
         ]
       }

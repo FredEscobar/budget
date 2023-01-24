@@ -3,6 +3,7 @@ import { getBudgetById } from "../../api/budgetApi";
 import { useParams } from "react-router-dom";
 import Period from "../period/period";
 import OcurredExpensesList from "../ocurredExpenses/ocurredExpensesList";
+import BalancesPage from "../balances/balancesPage";
 
 const BudgetPage = (props) => {
   const [budget, setBudget] = useState({
@@ -36,6 +37,8 @@ const BudgetPage = (props) => {
     expectedExpensesContent: "",
     incurredExpensesTab: "",
     incurredExpensesContent: "is-hidden",
+    balancesTab: "",
+    balancesContent: "is-hidden",
   });
 
   let params = useParams();
@@ -53,6 +56,8 @@ const BudgetPage = (props) => {
             incurredExpensesContent: "is-hidden",
             expectedExpensesContent: "",
             incurredExpensesTab: "",
+            balancesTab: "",
+            balancesContent: "is-hidden",
           };
         });
         break;
@@ -63,6 +68,20 @@ const BudgetPage = (props) => {
             expectedExpensesContent: "is-hidden",
             expectedExpensesTab: "",
             incurredExpensesContent: "",
+            balancesTab: "",
+            balancesContent: "is-hidden",
+          };
+        });
+        break;
+      case 2:
+        setTabCssClass((tcc) => {
+          return {
+            incurredExpensesTab: "",
+            expectedExpensesContent: "is-hidden",
+            expectedExpensesTab: "",
+            incurredExpensesContent: "is-hidden",
+            balancesTab: "is-active",
+            balancesContent: "",
           };
         });
         break;
@@ -87,6 +106,12 @@ const BudgetPage = (props) => {
           >
             <a>Gastos incurridos</a>
           </li>
+          <li
+            className={tabCssClass.balancesTab}
+            onClick={() => handleTabSwtich(2)}
+          >
+            <a>Balances</a>
+          </li>
         </ul>
       </div>
       <div className={tabCssClass.expectedExpensesContent}>
@@ -103,6 +128,9 @@ const BudgetPage = (props) => {
       </div>
       <div className={tabCssClass.incurredExpensesContent}>
         <OcurredExpensesList budget={budget} setBudget={setBudget} />
+      </div>
+      <div className={tabCssClass.balancesContent}>
+        <BalancesPage />
       </div>
     </div>
   );
