@@ -1,6 +1,8 @@
 import { useState } from "react";
 import * as budgetApi from "../../api/budgetApi";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { v4 as uuidv4 } from "uuid";
+import { banks } from "../../data/common";
 
 const ExpectedExpense = ({
   isActive,
@@ -20,34 +22,32 @@ const ExpectedExpense = ({
   function handleSave() {
     if (!formIsValid()) return;
 
-    const newPeriods = budget.periods.map((p) =>
-      p.description !== period.description
-        ? p
-        : {
-            ...p,
-            expectedExpenses: expectedExpense.id
-              ? p.expectedExpenses.map((p) =>
-                  p.id === expectedExpense.id ? expectedExpense : p
-                )
-              : [...p.expectedExpenses, { ...expectedExpense, id: uuidv4() }],
-          }
-    );
+    budgetApi
+      .addExpectedExpense({
+        expectedExpense: expectedExpense.id
+          ? expectedExpense
+          : { ...expectedExpense, id: uuidv4() },
+        budgetId: budget.id,
+        period: period.description,
+      })
+      .then((statusCode) => {
+        if (statusCode === 200) {
+          budgetApi
+            .getBudgetById(budget.id)
+            .then((response) => setBudget(unmarshall(response[0])));
+        }
+      });
 
-    const updatedBudget = {
-      ...budget,
-      periods: newPeriods,
-    };
-
-    budgetApi.saveBudget(updatedBudget).then((b) => setBudget(b));
     handleCancel();
   }
 
   function formIsValid() {
-    const { description, valueUSD } = expectedExpense;
+    const { description, valueUSD, bankId } = expectedExpense;
     const errors = {};
 
     if (!description) errors.description = "Descripción es requerida.";
     if (!valueUSD) errors.valueUSD = "Valor es requerido.";
+    if (!bankId) errors.bankId = "Banco es requerido";
 
     setErrors(errors);
     // Form is valid if the errors object still has no properties
@@ -93,7 +93,7 @@ const ExpectedExpense = ({
             </div>
           </div>
           <div className="field">
-            <label className="label has-text-left">Valor USD</label>
+            <label className="label has-text-left">Monto USD</label>
             <div className="control">
               <input
                 id="valueUSD"
@@ -107,6 +107,35 @@ const ExpectedExpense = ({
               {errors.valueUSD && (
                 <div className="has-text-left has-text-danger">
                   {errors.valueUSD}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="field">
+            <label className="label has-text-left">Banco</label>
+            <div className="control">
+              <div className="select" style={{ width: "100%" }}>
+                <select
+                  name="bankId"
+                  style={{ width: "100%" }}
+                  onChange={onChange}
+                  value={expectedExpense.bankId}
+                >
+                  <option className="has-text-grey-light" value="">
+                    Seleccionar banco
+                  </option>
+                  {banks.map((bank) => {
+                    return (
+                      <option key={bank.id} value={bank.id}>
+                        {bank.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {errors.bankId && (
+                <div className="has-text-left has-text-danger">
+                  {errors.bankId}
                 </div>
               )}
             </div>

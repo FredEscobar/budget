@@ -1,8 +1,9 @@
-import React from "react";
-import { saveBudget } from "../../api/budgetApi";
+import React, { useState } from "react";
+import { addIncurredExpense, getBudgetById } from "../../api/budgetApi";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 
-const OcurredExpense = ({
+const IncurredExpense = ({
   isActive,
   setIsActive,
   budget,
@@ -12,6 +13,7 @@ const OcurredExpense = ({
   categories,
   creditCards,
 }) => {
+  const [errors, setErrors] = useState({});
   function handleChange({ target }) {
     setOcurredExpense({
       ...ocurredExpense,
@@ -27,23 +29,32 @@ const OcurredExpense = ({
   }
 
   function handleSave() {
-    const updatedIncurredExpenses = ocurredExpense.id
-      ? budget.incurredExpenses.items.map((ie) =>
-          ie.id === ocurredExpense.id ? ocurredExpense : ie
-        )
-      : [...budget.incurredExpenses.items, { ...ocurredExpense, id: uuidv4() }];
+    if (!isFormValid()) return;
 
-    const updatedBudget = {
-      ...budget,
-      incurredExpenses: {
-        ...budget.incurredExpenses,
-        items: updatedIncurredExpenses,
-      },
-    };
-
-    saveBudget(updatedBudget).then((b) => setBudget(b));
+    addIncurredExpense({
+      incurredExpense: { ...ocurredExpense, id: uuidv4() },
+      budgetId: budget.id,
+    }).then((statusCode) => {
+      if (statusCode === 200) {
+        getBudgetById(budget.id).then((response) =>
+          setBudget(unmarshall(response[0]))
+        );
+      }
+    });
 
     setIsActive(false);
+  }
+
+  function isFormValid() {
+    const { description, category, creditCard } = ocurredExpense;
+    const errors = {};
+    if (!description) errors.description = "Descripción es requerida.";
+    if (!category) errors.category = "Categoria es requerida.";
+    if (!creditCard) errors.creditCard = "Tarjeta es requerida.";
+
+    setErrors(errors);
+    // Form is valid if the errors object still has no properties
+    return Object.keys(errors).length === 0;
   }
 
   return (
@@ -65,6 +76,11 @@ const OcurredExpense = ({
                 onChange={handleChange}
                 value={ocurredExpense.description}
               ></input>
+              {errors.description && (
+                <div className="has-text-left has-text-danger">
+                  {errors.description}
+                </div>
+              )}
             </div>
           </div>
           <div className="field">
@@ -89,6 +105,11 @@ const OcurredExpense = ({
                   })}
                 </select>
               </div>
+              {errors.category && (
+                <div className="has-text-left has-text-danger">
+                  {errors.category}
+                </div>
+              )}
             </div>
           </div>
           <div className="field">
@@ -113,6 +134,11 @@ const OcurredExpense = ({
                   })}
                 </select>
               </div>
+              {errors.creditCard && (
+                <div className="has-text-left has-text-danger">
+                  {errors.creditCard}
+                </div>
+              )}
             </div>
           </div>
           <div className="field">
@@ -157,4 +183,4 @@ const OcurredExpense = ({
   );
 };
 
-export default OcurredExpense;
+export default IncurredExpense;

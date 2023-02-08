@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getBudgetById } from "../../api/budgetApi";
 import { useParams } from "react-router-dom";
 import Period from "../period/period";
-import OcurredExpensesList from "../ocurredExpenses/ocurredExpensesList";
+import IncurredExpensesList from "../incurredExpenses/incurredExpensesList";
 import BalancesPage from "../balances/balancesPage";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 const BudgetPage = (props) => {
   const [budget, setBudget] = useState({
@@ -30,6 +32,8 @@ const BudgetPage = (props) => {
       totalCS: 0,
       items: [],
     },
+    balancesByCategory: [],
+    balancesByCategoryAndCreditCard: [],
   });
 
   const [tabCssClass, setTabCssClass] = useState({
@@ -44,7 +48,9 @@ const BudgetPage = (props) => {
   let params = useParams();
 
   useEffect(() => {
-    getBudgetById(params.id).then((response) => setBudget(response));
+    getBudgetById(params.id).then((response) =>
+      setBudget(unmarshall(response[0]))
+    );
   }, [params]);
 
   function handleTabSwtich(index) {
@@ -92,6 +98,15 @@ const BudgetPage = (props) => {
 
   return (
     <div className="container m-4">
+      <nav className="level">
+        <div className="level-left" />
+        <div className="level-right">
+          <div className="level-item">
+            <Link to="/">Regresar</Link>
+          </div>
+        </div>
+      </nav>
+
       <div className="tabs">
         <ul>
           <li
@@ -127,10 +142,15 @@ const BudgetPage = (props) => {
         })}
       </div>
       <div className={tabCssClass.incurredExpensesContent}>
-        <OcurredExpensesList budget={budget} setBudget={setBudget} />
+        <IncurredExpensesList budget={budget} setBudget={setBudget} />
       </div>
       <div className={tabCssClass.balancesContent}>
-        <BalancesPage />
+        <BalancesPage
+          balancesByCategory={budget.balancesByCategory}
+          balancesByCategoryAndCreditCard={
+            budget.balancesByCategoryAndCreditCard
+          }
+        />
       </div>
     </div>
   );

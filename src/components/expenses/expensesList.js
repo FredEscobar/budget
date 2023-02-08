@@ -4,11 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { saveBudget } from "../../api/budgetApi";
+import { getBudgetById, removeExpectedExpense } from "../../api/budgetApi";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 
 const ExpensesList = ({ period, budget, setBudget }) => {
   const [isModalActive, setIsModalActive] = useState(false);
-  const [currentExpense, setCurrentExpense] = useState({});
+  const [currentExpense, setCurrentExpense] = useState({
+    id: "",
+    description: "",
+    valueUSD: 0,
+    valueCS: 0,
+  });
 
   function showModal() {
     setIsModalActive(true);
@@ -22,23 +28,17 @@ const ExpensesList = ({ period, budget, setBudget }) => {
         {
           label: "Sí",
           onClick: () => {
-            const newPeriods = budget.periods.map((p) =>
-              p.description !== period.description
-                ? p
-                : {
-                    ...p,
-                    expectedExpenses: p.expectedExpenses.filter(
-                      (ee) => ee.id !== id
-                    ),
-                  }
-            );
-
-            const updatedBudget = {
-              ...budget,
-              periods: newPeriods,
-            };
-
-            saveBudget(updatedBudget).then((b) => setBudget(b));
+            removeExpectedExpense({
+              expectedExpenseId: id,
+              budgetId: budget.id,
+              period: period.description,
+            }).then((statusCode) => {
+              if (statusCode === 200) {
+                getBudgetById(budget.id).then((response) =>
+                  setBudget(unmarshall(response[0]))
+                );
+              }
+            });
           },
         },
         {
@@ -60,6 +60,7 @@ const ExpensesList = ({ period, budget, setBudget }) => {
               className="button is-link"
               onClick={() => {
                 setCurrentExpense({
+                  bankId: "",
                   description: "",
                   valueUSD: 0,
                   valueCS: 0,

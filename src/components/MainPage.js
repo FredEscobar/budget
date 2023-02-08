@@ -5,7 +5,7 @@ import BudgetPage from "./budgets/budgetPage";
 
 const MainPage = (props) => {
   return (
-    <div className="container m-4">
+    <div className="container">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<BudgetList />} />

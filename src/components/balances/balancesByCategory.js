@@ -1,4 +1,5 @@
 import React from "react";
+import { incurredExpenseCategories as categories } from "../../data/common";
 
 const BalancesByCategory = ({ title, items }) => {
   return (
@@ -9,8 +10,8 @@ const BalancesByCategory = ({ title, items }) => {
           <thead>
             <tr>
               <th className="has-text-left">Categoria</th>
-              <th className="has-text-right">US$</th>
               <th className="has-text-right">C$</th>
+              <th className="has-text-right">US$</th>
               <th className="has-text-right">Pagado</th>
               <th className="has-text-right">Balance</th>
             </tr>
@@ -18,8 +19,10 @@ const BalancesByCategory = ({ title, items }) => {
           <tbody>
             {items &&
               items.map((i) => (
-                <tr key={i.description}>
-                  <td className="has-text-left">{i.description}</td>
+                <tr key={i.categoryId}>
+                  <td className="has-text-left">
+                    {categories.find((c) => c.value === i.categoryId).text}
+                  </td>
                   <td className="has-text-right">
                     {i.amountCS.toLocaleString("es-NI", {
                       style: "currency",
