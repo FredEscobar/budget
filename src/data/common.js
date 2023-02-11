@@ -23,6 +23,22 @@ const banks = [
   { id: "ef981cbd-1abb-49db-a60a-bafcf5ca254f", name: "BAC" },
   { id: "0823e785-53bc-418b-b56c-c7518819848f", name: "LAFISE" },
   { id: "1766dffc-551c-4f37-ae95-c3b53c09c999", name: "BDF" },
+  { id: "9264006b-c420-4224-8159-b40d94bc34bf", name: "Ficohsa" },
 ];
 
-export { incurredExpenseCategories, creditCards, banks };
+const months = [
+  { number: 1, name: "Enero" },
+  { number: 2, name: "Febrero" },
+  { number: 3, name: "Marzo" },
+  { number: 4, name: "Abril" },
+  { number: 5, name: "Mayo" },
+  { number: 6, name: "Junio" },
+  { number: 7, name: "Julio" },
+  { number: 8, name: "Agosto" },
+  { number: 9, name: "Septiembre" },
+  { number: 10, name: "Octubre" },
+  { number: 11, name: "Noviembre" },
+  { number: 12, name: "Diciembre" },
+];
+
+export { incurredExpenseCategories, creditCards, banks, months };

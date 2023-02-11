@@ -12,16 +12,32 @@ const IncurredExpense = ({
   setOcurredExpense,
   categories,
   creditCards,
+  amountCS,
+  setAmountCS,
+  amountUSD,
+  setAmountUSD,
+  exchangeRate,
 }) => {
   const [errors, setErrors] = useState({});
+
   function handleChange({ target }) {
-    setOcurredExpense({
-      ...ocurredExpense,
-      [target.name]:
-        target.name === "amountUSD" || target.name === "amountCS"
-          ? +target.value
-          : target.value,
-    });
+    switch (target.name) {
+      case "amountCS":
+        setAmountCS(target.value);
+        setAmountUSD(Math.round((target.value / exchangeRate) * 100) / 100);
+        break;
+      case "amountUSD":
+        setAmountUSD(target.value);
+        setAmountCS(Math.round(target.value * exchangeRate * 100) / 100);
+        break;
+      default:
+        setOcurredExpense({
+          ...ocurredExpense,
+          [target.name]:
+            target.name === "isUSD" ? target.checked : target.value,
+        });
+        break;
+    }
   }
 
   function handleCancel() {
@@ -32,7 +48,12 @@ const IncurredExpense = ({
     if (!isFormValid()) return;
 
     addIncurredExpense({
-      incurredExpense: { ...ocurredExpense, id: uuidv4() },
+      incurredExpense: {
+        ...ocurredExpense,
+        amountCS: +amountCS,
+        amountUSD: +amountUSD,
+        id: uuidv4(),
+      },
       budgetId: budget.id,
     }).then((statusCode) => {
       if (statusCode === 200) {
@@ -148,9 +169,9 @@ const IncurredExpense = ({
                 id="amountCS"
                 name="amountCS"
                 className="input"
-                type="number"
+                type="text"
                 placeholder=""
-                value={ocurredExpense.amountCS}
+                value={amountCS}
                 onChange={handleChange}
               />
             </div>
@@ -162,11 +183,26 @@ const IncurredExpense = ({
                 id="amountUSD"
                 name="amountUSD"
                 className="input"
-                type="number"
+                type="text"
                 placeholder=""
-                value={ocurredExpense.amountUSD}
+                value={amountUSD}
                 onChange={handleChange}
               />
+            </div>
+          </div>
+          <div className="field">
+            <div className="control">
+              <label className="checkbox is-flex">
+                <input
+                  type="checkbox"
+                  id="isUSD"
+                  name="isUSD"
+                  checked={ocurredExpense.isUSD}
+                  value={ocurredExpense.isUSD}
+                  onChange={handleChange}
+                />
+                &nbsp; Es dolares
+              </label>
             </div>
           </div>
         </section>

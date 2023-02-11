@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getBudgets, cloneBudget } from "../../api/budgetApi";
+import { getBudgets, removeBudget } from "../../api/budgetApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { faPenToSquare, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import CloneBudget from "./cloneBudget";
+import { confirmAlert } from "react-confirm-alert";
+import { months } from "../../data/common";
 
 const BudgetList = () => {
   const [budgets, setBudgets] = useState([]);
@@ -25,8 +27,37 @@ const BudgetList = () => {
     setModalIsActive(true);
   }
 
+  function handleDelete(budget) {
+    confirmAlert({
+      title: "Eliminar",
+      message: "¿Desea eliminar este presupuesto",
+      buttons: [
+        {
+          label: "Sí",
+          onClick: () => {
+            removeBudget({
+              budgetId: budget.id,
+              year: budget.year.toString(),
+            }).then((statusCode) => {
+              if (statusCode === 200) {
+                getBudgets().then((response) =>
+                  setBudgets(response.map((b) => unmarshall(b)))
+                );
+              }
+            });
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
+  }
+
   return (
     <>
+      <h1 className="subtitle is-2 has-text-left my-5">Presupuestos</h1>
+
       <table className="table is-fullwidth mt-5">
         <thead>
           <tr>
@@ -39,24 +70,35 @@ const BudgetList = () => {
           {budgets.map((budget) => {
             return (
               <tr key={budget.id}>
-                <td>{budget.month}</td>
+                <td>{months.find((m) => m.number === budget.month)?.name}</td>
                 <td>{budget.year}</td>
                 <td>
-                  <div className="level">
-                    <span className="icon level-item">
+                  <div className="is-justify-content-center">
+                    <span className="m-1">
                       <a
+                        title="Ver detalle"
                         href={"/budget/" + budget.id}
                         className="button is-link is-small is-outlined"
                       >
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </a>
                     </span>
-                    <span className="icon level-item">
+                    <span className="m-1">
                       <a
-                        className="button is-link is-small is-outlined"
+                        title="Clonar"
+                        className="button is-link is-info is-small is-outlined"
                         onClick={() => onClone(budget.id)}
                       >
                         <FontAwesomeIcon icon={faClone} />
+                      </a>
+                    </span>
+                    <span className="m-1">
+                      <a
+                        title="Eliminar"
+                        className="button is-link is-danger is-small is-outlined"
+                        onClick={() => handleDelete(budget)}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
                       </a>
                     </span>
                   </div>

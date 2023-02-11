@@ -6,43 +6,60 @@ const BalancesByCategory = ({ title, items }) => {
     <div className="panel">
       <div className="panel-heading">{title}</div>
       <div className="panel-block">
-        <table className="table is-fullwidth">
+        <table className="table is-fullwidth is-narrow">
           <thead>
             <tr>
               <th className="has-text-left">Categoria</th>
               <th className="has-text-right">C$</th>
               <th className="has-text-right">US$</th>
-              <th className="has-text-right">Pagado</th>
-              <th className="has-text-right">Balance</th>
+              <th className="has-text-right">Presup. C$</th>
+              <th className="has-text-right">Presup.US$</th>
+              <th className="has-text-right">Disp. C$</th>
+              <th className="has-text-right">Disp. US$</th>
             </tr>
           </thead>
           <tbody>
             {items &&
-              items.map((i) => (
-                <tr key={i.categoryId}>
+              items.map((balanceItem) => (
+                <tr key={balanceItem.categoryId}>
                   <td className="has-text-left">
-                    {categories.find((c) => c.value === i.categoryId).text}
+                    {
+                      categories.find((c) => c.value === balanceItem.categoryId)
+                        .text
+                    }
                   </td>
                   <td className="has-text-right">
-                    {i.amountCS.toLocaleString("es-NI", {
+                    {balanceItem.amountCS?.toLocaleString("es-NI", {
                       style: "currency",
                       currency: "NIO",
                     })}
                   </td>
                   <td className="has-text-right">
-                    {i.amountUSD.toLocaleString("en-US", {
+                    {balanceItem.amountUSD?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
                   </td>
                   <td className="has-text-right">
-                    {i.paidCS.toLocaleString("es-NI", {
+                    {balanceItem.availableCS?.toLocaleString("es-NI", {
                       style: "currency",
                       currency: "NIO",
                     })}
                   </td>
                   <td className="has-text-right">
-                    {i.balance.toLocaleString("en-US", {
+                    {balanceItem.availableUSD?.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </td>
+                  <td className="has-text-right">
+                    {balanceItem.balanceCS?.toLocaleString("es-NI", {
+                      style: "currency",
+                      currency: "NIO",
+                    })}
+                  </td>
+                  <td className="has-text-right">
+                    {balanceItem.balanceUSD?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}

@@ -2,7 +2,10 @@ import { useState } from "react";
 import * as budgetApi from "../../api/budgetApi";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { v4 as uuidv4 } from "uuid";
-import { banks } from "../../data/common";
+import {
+  banks,
+  incurredExpenseCategories as categories,
+} from "../../data/common";
 
 const ExpectedExpense = ({
   isActive,
@@ -14,6 +17,9 @@ const ExpectedExpense = ({
   setExpectedExpense,
 }) => {
   const [errors, setErrors] = useState({});
+  const [amountUSDString, setAmountUSDString] = useState(
+    expectedExpense.valueUSD
+  );
 
   function handleCancel() {
     setIsActive(false);
@@ -25,8 +31,8 @@ const ExpectedExpense = ({
     budgetApi
       .addExpectedExpense({
         expectedExpense: expectedExpense.id
-          ? expectedExpense
-          : { ...expectedExpense, id: uuidv4() },
+          ? { ...expectedExpense, valueUSD: +amountUSDString }
+          : { ...expectedExpense, valueUSD: +amountUSDString, id: uuidv4() },
         budgetId: budget.id,
         period: period.description,
       })
@@ -55,10 +61,14 @@ const ExpectedExpense = ({
   }
 
   function onChange({ target }) {
-    setExpectedExpense({
-      ...expectedExpense,
-      [target.name]: target.name === "valueUSD" ? +target.value : target.value,
-    });
+    if (target.name === "valueUSD") {
+      setAmountUSDString(target.value);
+    } else {
+      setExpectedExpense({
+        ...expectedExpense,
+        [target.name]: target.value,
+      });
+    }
   }
 
   return (
@@ -69,7 +79,7 @@ const ExpectedExpense = ({
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Modal title</p>
+          <p className="modal-card-title">Gasto programado</p>
           <button className="delete" aria-label="close"></button>
         </header>
         <section className="modal-card-body">
@@ -83,6 +93,7 @@ const ExpectedExpense = ({
                 type="text"
                 placeholder=""
                 onChange={onChange}
+                autoFocus
                 value={expectedExpense.description}
               />
               {errors.description && (
@@ -99,10 +110,10 @@ const ExpectedExpense = ({
                 id="valueUSD"
                 name="valueUSD"
                 className="input"
-                type="number"
+                type="text"
                 placeholder=""
                 onChange={onChange}
-                value={expectedExpense.valueUSD}
+                value={amountUSDString}
               />
               {errors.valueUSD && (
                 <div className="has-text-left has-text-danger">
@@ -136,6 +147,35 @@ const ExpectedExpense = ({
               {errors.bankId && (
                 <div className="has-text-left has-text-danger">
                   {errors.bankId}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="field">
+            <label className="label has-text-left">Categoria</label>
+            <div className="control">
+              <div className="select" style={{ width: "100%" }}>
+                <select
+                  name="category"
+                  style={{ width: "100%" }}
+                  onChange={onChange}
+                  value={expectedExpense.category}
+                >
+                  <option className="has-text-grey-light" value="">
+                    Seleccionar categoria
+                  </option>
+                  {categories.map((category) => {
+                    return (
+                      <option key={category.value} value={category.value}>
+                        {category.text}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {errors.category && (
+                <div className="has-text-left has-text-danger">
+                  {errors.category}
                 </div>
               )}
             </div>

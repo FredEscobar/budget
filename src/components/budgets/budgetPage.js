@@ -6,8 +6,9 @@ import Period from "../period/period";
 import IncurredExpensesList from "../incurredExpenses/incurredExpensesList";
 import BalancesPage from "../balances/balancesPage";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { months } from "../../data/common";
 
-const BudgetPage = (props) => {
+const BudgetPage = () => {
   const [budget, setBudget] = useState({
     periods: [
       {
@@ -99,7 +100,12 @@ const BudgetPage = (props) => {
   return (
     <div className="container m-4">
       <nav className="level">
-        <div className="level-left" />
+        <div className="level-left is-size-5">
+          <strong className="m-2">Mes:</strong>
+          <p>{months.find((m) => m.number === budget.month)?.name}</p>
+          <strong className="m-2">Año:</strong>
+          <p>{budget.year}</p>
+        </div>
         <div className="level-right">
           <div className="level-item">
             <Link to="/">Regresar</Link>

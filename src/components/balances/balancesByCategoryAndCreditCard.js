@@ -9,14 +9,14 @@ const BalancesByCategoryAndCreditCard = ({ title, items }) => {
     <div className="panel">
       <div className="panel-heading">{title}</div>
       <div className="panel-block">
-        <table className="table is-fullwidth">
+        <table className="table is-fullwidth is-narrow">
           <thead>
             <tr>
               <th className="has-text-left">Categoria</th>
               <th className="has-text-right">C$</th>
               <th className="has-text-right">US$</th>
               <th className="has-text-right">Pagado</th>
-              <th className="has-text-right">Balance</th>
+              <th className="has-text-right">Pend. Pagar</th>
             </tr>
           </thead>
           <tbody>

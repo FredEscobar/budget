@@ -14,6 +14,7 @@ const ExpensesList = ({ period, budget, setBudget }) => {
     description: "",
     valueUSD: 0,
     valueCS: 0,
+    category: "",
   });
 
   function showModal() {
@@ -74,7 +75,7 @@ const ExpensesList = ({ period, budget, setBudget }) => {
         </div>
       </div>
 
-      <table className="table is-fullwidth">
+      <table className="table is-fullwidth is-narrow">
         <thead>
           <tr>
             <th>Descripcion</th>
@@ -126,6 +127,7 @@ const ExpensesList = ({ period, budget, setBudget }) => {
         </tbody>
       </table>
       <ExpectedExpense
+        key={currentExpense.id}
         isActive={isModalActive}
         setIsActive={setIsModalActive}
         period={period}

@@ -125,3 +125,29 @@ export function cloneBudget(cloneBudgetRequest) {
     .then((response) => response.status)
     .catch(handleError);
 }
+
+export function removeBudget(removeBudgetRequest) {
+  const url =
+    "https://yniwa224gt65w3mpypv6uxa3sm0mjsdd.lambda-url.us-east-1.on.aws/";
+
+  return fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(removeBudgetRequest),
+  })
+    .then((response) => response.status)
+    .catch(handleError);
+}
+
+export function updatePeriodExchangeRate(exchangeRateRequest) {
+  const url =
+    "https://kc6my4lfoophs2erlvwcca3dg40ojjwt.lambda-url.us-east-1.on.aws/";
+
+  return fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(exchangeRateRequest),
+  })
+    .then((response) => response.status)
+    .catch(handleError);
+}

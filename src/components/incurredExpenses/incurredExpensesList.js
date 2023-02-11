@@ -16,6 +16,23 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
     amountCS: 0,
     amountUSD: 0,
   });
+  const [amountCS, setAmountCS] = useState("0");
+  const [amountUSD, setAmountUSD] = useState("0");
+
+  function handleAdd() {
+    setCurrentOcurredExpense({
+      description: "",
+      id: "",
+      category: "",
+      creditCard: "",
+      amountCS: 0,
+      amountUSD: 0,
+      isUSD: false,
+    });
+    setAmountCS("0");
+    setAmountUSD("0");
+    setIsModalActive(true);
+  }
 
   function showModal() {
     setIsModalActive(true);
@@ -54,16 +71,11 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
         <div className="box">
           <h1 className="title mb-6">Gastos incurridos</h1>
           <div className="block level-right">
-            <button
-              className="button is-link"
-              onClick={() => {
-                showModal();
-              }}
-            >
+            <button className="button is-link" onClick={handleAdd}>
               Agregar
             </button>
           </div>
-          <table className="table is-fullwidth">
+          <table className="table is-fullwidth is-narrow">
             <thead>
               <tr>
                 <th>Descripcion</th>
@@ -71,6 +83,7 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
                 <th className="has-text-centered">Tarjeta</th>
                 <th className="has-text-right">Monto CS</th>
                 <th className="has-text-right">Monto USD</th>
+                <th>Es USD</th>
                 <th></th>
               </tr>
             </thead>
@@ -103,6 +116,8 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
                         className="button is-ghost"
                         onClick={() => {
                           setCurrentOcurredExpense(incurredExpense);
+                          setAmountCS(incurredExpense.amountCS);
+                          setAmountUSD(incurredExpense.amountUSD);
                           showModal();
                         }}
                       >
@@ -130,11 +145,12 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
                       })}
                     </td>
                     <td className="has-text-right">
-                      {incurredExpense.amountUSD.toLocaleString("en-US", {
+                      {incurredExpense.amountUSD?.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                       })}
                     </td>
+                    <td>{incurredExpense.isUSD ? "Si" : "No"}</td>
                     <td>
                       <span className="icon">
                         <button
@@ -152,6 +168,7 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
         </div>
       </div>
       <OcurredExpense
+        key={currentOcurredExpense.id}
         isActive={isModalActive}
         setIsActive={setIsModalActive}
         budget={budget}
@@ -160,6 +177,11 @@ const IncurredExpensesList = ({ budget, setBudget }) => {
         setOcurredExpense={setCurrentOcurredExpense}
         categories={categories}
         creditCards={creditCards}
+        amountCS={amountCS}
+        setAmountCS={setAmountCS}
+        amountUSD={amountUSD}
+        setAmountUSD={setAmountUSD}
+        exchangeRate={budget.periods[0].exchangeRate}
       />
     </>
   );
